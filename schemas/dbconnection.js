@@ -3,7 +3,7 @@ mongoose.set('strictQuery',true)
 const connect = () => {
   mongoose
   // .connect("mongodb://localhost:27017/homework")
-  .connect("mongodb+srv://test:sparta@cluster0.mba3lo1.mongodb.net/?retryWrites=true&w=majority")
+  .connect("mongodb://localhost:27017/homework")
   .catch(err => console.log(err))
 }
 

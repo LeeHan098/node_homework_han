@@ -12,7 +12,7 @@ const commentSchema = new mongoose.Schema({
   createdAt: {
     type: Date, default: Date.now
   },
-
+  postid: [{ type: mongoose.Schema.Types.ObjectId, ref: "Posts" }]
 });
 
-module.exports = mongoose.model("Comment", commentSchema);
+module.exports = mongoose.model("Comments", commentSchema);
