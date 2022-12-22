@@ -95,16 +95,5 @@ router.delete("/comments/:_id/", async (req, res) => {
     }
 });
 
-//전체 댓글 조회
-router.get("/comments", async (req, res) => {
-    try {
-        // const posts = await Posts.findById({_id}).exec()
-        const comments = await Comments.find({}).sort({ createdAt: -1 });
-        // console.log(posts)
-        console.log(comments);
-        return res.status(200).json({ comments });
-    } catch {
-        return res.status(400).json({ errorMessage: "error" }).end();
-    }
-});
+
 module.exports = router;
