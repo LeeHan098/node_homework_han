@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { Post,Comment } = require("../models")
+const { Post, Comment } = require("../models")
 
 
 //post 생성
@@ -83,14 +83,14 @@ router.delete('/posts/postId', async (req, res) => {
 })
 
 // 내가쓴글 찾기
-router.get('/posts', async(req,res) => {
+router.get('/posts', async (req, res) => {
   const userId = req.userId
-  console.log('userId111',userId)
-  try{
-  const showpost = await Post.findAll({ where: { userId :userId} })
-  res.status(200).json({ detail: showpost })
+  console.log('userId111', userId)
+  try {
+    const showpost = await Post.findAll({ where: { userId: userId } })
+    res.status(200).json({ detail: showpost })
   }
-  catch{
+  catch {
     return res.status(404).json({ errorMessage: "유저가 쓴 글 없음" }).end()
   }
 })
@@ -98,37 +98,68 @@ router.get('/posts', async(req,res) => {
 
 //댓글 생성
 router.post("/posts/comments/:postid", async (req, res) => {
-  const  {postid}  = req.params;
-  console.log( postid );
-  console.log(Number({postid}))
+  const { postid } = req.params;
+  console.log(postid);
+  console.log(Number({ postid }))
   const userId = req.userId
   const { text } = req.body;
   if (!text) {
-      return res.status(404).json({ errorMessage: "내용을 작성해주세요." });
-  }
-  try{
-      const postId = await Post.findOne({ where: { postid :postid}})
-      console.log( postId );
-      console.log(typeof postId);
-  } catch {
-      return res
-          .status(404)
-          .json({ errorMessage: "postid를 찾을 수 없습니다." });
+    return res.status(404).json({ errorMessage: "내용을 작성해주세요." });
   }
   try {
-      const createdComment = await Comment.create({
-          text: text,
-          userId:userId,
-          postId: postid,
-      });
-      res.status(201).json({ comment: createdComment });
-      console.log("메세지 저장");
+    const postId = await Post.findOne({ where: { postid: postid } })
+    console.log(postId);
+    console.log(typeof postId);
   } catch {
-      res.status(400).json({
-          success: false,
-          errorMessage: "생성에 실패했습니다.",
-      });
+    return res
+      .status(404)
+      .json({ errorMessage: "postid를 찾을 수 없습니다." });
+  }
+  try {
+    const createdComment = await Comment.create({
+      text: text,
+      userId: userId,
+      postId: postid,
+    });
+    res.status(201).json({ comment: createdComment });
+    console.log("메세지 저장");
+  } catch {
+    res.status(400).json({
+      success: false,
+      errorMessage: "생성에 실패했습니다.",
+    });
   }
 });
+//댓글 수정
+router.put("/comments/:commentId/", async (req, res) => {
+  const { commentId } = req.params;
+  const { text } = req.body;
+  console.log({ commentId });
+  if (!text) {
+    return res
+      .status(404)
+      .json({ errorMessage: "수정할 text가 비었습니다." });
+  }
+  try {
+    const comment = await Comment.findOne({ where: {commnetId: commentId } })
+    console.log(comment);
 
+    await Comment.update({ text : text }, {where:{commnetId:commentId}});
+    return res.status(200).json({ succes: "수정 성공" }).end();
+
+  } catch {
+    return res.status(404).json({ errorMessage: "id가 없음" }).end();
+  }
+});
+//댓글 삭제
+router.delete("/comments/:commentId/", async (req, res) => {
+  const { commentId } = req.params;
+  console.log({ commentId });
+  try {
+      await Comment.destroy({where: {commnetId: commentId } });
+      return res.status(200).json({ succes: "삭제 성공" }).end();
+  } catch {
+      return res.status(404).json({ errorMessage: "id가 없음" }).end();
+  }
+});
 module.exports = router
