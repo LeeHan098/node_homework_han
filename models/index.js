@@ -6,14 +6,24 @@ const Sequelize = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
 let sequelize;
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  sequelize = new Sequelize(process.env[config.use_env_variable], config,{host: process.env.MYSQL_URL,
+    dialect: "mysql",
+    timezone: "+09:00", // DB에 저장할 때 시간 설정
+    dialectOptions: {
+      timezone: "+09:00", // DB에서 가져올 때 시간 설정
+    }});
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(config.database, config.username, config.password, config,{host: process.env.MYSQL_URL,
+    dialect: "mysql",
+    timezone: "+09:00", // DB에 저장할 때 시간 설정
+    dialectOptions: {
+      timezone: "+09:00", // DB에서 가져올 때 시간 설정
+    }});
 }
 
 fs

@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const jwt = require("jsonwebtoken");
 const router = express.Router()
 const postsRouter = require('./routes/posts.js')
-const commentRouter = require('./routes/comments.js')
+
 const userRouter = require('./routes/user.js')
 const loginRouter = require('./routes/loggin.js')
 const findpostRouter = require('./routes/findpost.js')
@@ -24,9 +24,10 @@ const ConnectDB = async () => {
 }
 ConnectDB();
 app.use(express.json(),cookieParser())
-app.use("/nologgin",[loginRouter,userRouter,findpostRouter])
+app.use("/find",[findpostRouter])
+app.use("/user",[loginRouter,userRouter])
 const authMiddle = require('./middlewares/auth-middleware.js')
-app.use("/api",authMiddle,[postsRouter,commentRouter])
+app.use("/api",authMiddle,[postsRouter])
 //로그인
 
 
