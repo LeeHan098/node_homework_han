@@ -7,9 +7,8 @@ module.exports = async (req, res, next) => {
   const [name, authToken] = (cookie || "").split("=")
   console.log(authToken)
   if (authToken) {
-    res.status(400).send({
-      errorMessage: '이미 로그인 됨'
-    })
+    const { userId } = jwt.verify(authToken, "secret-key")
+    
     return
   }
 next()

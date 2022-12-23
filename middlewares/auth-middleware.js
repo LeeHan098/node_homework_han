@@ -14,16 +14,17 @@ module.exports = async (req, res, next) => {
     })
     return
   }
-
   try {
     console.log({ authToken })
     const { userId } = jwt.verify(authToken, "secret-key")
     console.log("userId", userId)
     res.locals.userId = userId
     next()
+  
   }
   catch (err) {
     console.error(err)
+    res.clearCookie()
     res.status(401).send({
       errorMessage: "재로그인 필요"
     })

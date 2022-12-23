@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const { application } = require("express");
 const app = express();
 //회원가입
-router.post("/users", async(req,res) => {
+router.post("/signup", async(req,res) => {
   const {nickname, password, confirmPassword} = req.body
   const correct_nickname = /^[a-zA-Z0-9]{3,10}$/ 
   if (!(correct_nickname.test(nickname))) {

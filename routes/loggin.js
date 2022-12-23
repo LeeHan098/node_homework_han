@@ -11,7 +11,7 @@ require("dotenv").config();
 app.use(cookieParser())
 router.post("/login", async (req, res) => {
   // jwt 
-      const { nickname, password } = req.body
+  const { nickname, password } = req.body
   const user = await User.findOne({
     where: { nickname: nickname }
   })
@@ -22,24 +22,26 @@ router.post("/login", async (req, res) => {
   const token = jwt.sign(
     { userId: user.userId },
     "secret-key",
-    { expiresIn: "10minute" }
+    { expiresIn: "360s" }
   )
-  res.cookie('toeken', token)
-  res.status(200).json({ toke: token })
-  })
-  //refresh쿠키 실패
+  
+  const savelogin = await User.create({ loginAt: token })
+  res.cookie('toeken', token, { maxAge: 540000 })
+  res.status(200).json({ token: token })
+})
+//refresh쿠키 실패
 
-  // let toekenObject = {}
-  // const access = accessToken({ userId: user.userId })
-  // console.log(access)
-  // const refreshToken = createrefreshToken()
-  // toekenObject[refreshToken] = user.userId
+// let toekenObject = {}
+// const access = accessToken({ userId: user.userId })
+// console.log(access)
+// const refreshToken = createrefreshToken()
+// toekenObject[refreshToken] = user.userId
 
-  // res.cookie('accessToken',access)
-  // res.cookie('refreshToken',refreshToken)
-  // res.toekenObject = toekenObject
-  // console.log(res.toekenObject)
-  // res.status(200).json({"message":refreshToken})
+// res.cookie('accessToken',access)
+// res.cookie('refreshToken',refreshToken)
+// res.toekenObject = toekenObject
+// console.log(res.toekenObject)
+// res.status(200).json({"message":refreshToken})
 
 
 

@@ -25,7 +25,7 @@ const ConnectDB = async () => {
 ConnectDB();
 app.use(express.json(),cookieParser())
 app.use("/find",[findpostRouter])
-app.use("/user",[loginRouter,userRouter])
+app.use([loginRouter,userRouter])
 const authMiddle = require('./middlewares/auth-middleware.js')
 app.use("/api",authMiddle,[postsRouter])
 //로그인
