@@ -1,15 +1,14 @@
 const express = require('express');
 const app = express();
-const port = 3000;
 const cookieParser = require('cookie-parser');
 const jwt = require("jsonwebtoken");
-const router = express.Router()
+const port = 3000
 const postsRouter = require('./routes/posts.js')
-
 const userRouter = require('./routes/user.js')
 const loginRouter = require('./routes/loggin.js')
 const findpostRouter = require('./routes/findpost.js')
 const {sequelize} = require('./models');
+require('dotenv').config()
 const ConnectDB = async () => {
   try {
       await sequelize.authenticate().then( 

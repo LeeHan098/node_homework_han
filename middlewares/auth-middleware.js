@@ -4,11 +4,11 @@ require("dotenv").config();
 
 module.exports = async (req, res, next) => {
   const { cookie } = req.headers
-  console.log(req.headers)
   console.log(cookie)
   const [name, authToken] = (cookie || "").split("=")
   console.log(authToken)
   if (!authToken) {
+
     res.status(401).send({
       errorMessage: 'jwt토큰이 없습니다.'
     })
@@ -17,6 +17,7 @@ module.exports = async (req, res, next) => {
   try {
     console.log({ authToken })
     const { userId } = jwt.verify(authToken, "secret-key")
+    
     console.log("userId", userId)
     res.locals.userId = userId
     next()
